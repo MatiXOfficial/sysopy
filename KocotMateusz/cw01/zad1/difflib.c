@@ -2,15 +2,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 struct MainArray *createMainArray()
 {
-    struct MainArray *mainArray = calloc(1, sizeof(struct MainArray));
-    mainArray->length = 0;
+    struct MainArray *mainarr = calloc(1, sizeof(struct MainArray));
+    mainarr->oparr = NULL;
+    mainarr->length = 0;
+    return mainarr;
 }
 
 void diffTmp(char *filesString)
 {
+    // Counting files
     int filesCount = 1;
     for (int i = 0; filesString[i] != EOF; i++)
         if (filesString[i] == ' ')
@@ -19,9 +23,9 @@ void diffTmp(char *filesString)
     if (strlen(filesString) == 0 || filesCount == 0 || filesCount % 2 == 1)
     {
         printf("Wrong files number!\n");
-        return;
     }
 
+    // Reading file names
     char *newFilesString = calloc(strlen(filesString), sizeof(char));
     strcpy(newFilesString, filesString);
     char **filesSequence = calloc(filesCount, sizeof(char *));
@@ -33,7 +37,11 @@ void diffTmp(char *filesString)
         file = strtok(NULL, " ");
     }
 
+    // Executing proper diff-s and saving results to tmp file
     FILE *tmpFile = fopen("diffTmpFile.txt", "w+");
+    char pairsCount[3];
+    sprintf(pairsCount, "%d\n", filesCount / 2);
+    fputs(pairsCount, tmpFile);
     char command[50], ch;
     for (int i = 0; i < filesCount; i += 2)
     {
@@ -57,7 +65,135 @@ void diffTmp(char *filesString)
     printf("Saved results to the temporary file.\n");
 }
 
-int main()
+int saveTmpToArr(struct MainArray *mainarr)
 {
-    diffTmp("a.txt b.txt c.txt d.txt");
+    FILE *tmpFile = fopen("diffTmpFile.txt", "r+");
+    if (tmpFile == NULL)
+    {
+        printf("No tmp file.\n");
+        return -1;
+    }
+
+    // Counting operations numbers
+    char str[100];
+    fgets(str, 100, tmpFile);
+    int pairsNum;
+    sscanf(str, "%d", &pairsNum);
+    mainarr->length += pairsNum;
+    mainarr->oparr = realloc(mainarr->oparr, mainarr->length * sizeof(struct OperationsArrayb *));
+
+    for (int i = mainarr->length - pairsNum; i < mainarr->length; i++)
+    {
+        mainarr->oparr[i] = calloc(1, sizeof(struct OperationsArray));
+        mainarr->oparr[i]->length = 0;
+    }
+    int i = mainarr->length - pairsNum;
+    while (fgets(str, 100, tmpFile) != NULL)
+    {
+        if (isdigit(str[0]))
+            mainarr->oparr[i]->length++;
+        else if (str[0] == '\n')
+            i++;
+    }
+
+    // Filling operations array
+    rewind(tmpFile);
+    char tmpOpStr[500] = "";
+    fgets(str, 100, tmpFile);
+    i = mainarr->length - pairsNum; int j = 0;
+    while (fgets(str, 100, tmpFile) != NULL)
+    {
+        if (isdigit(str[0]))
+        {
+            if (strlen(tmpOpStr) == 0)
+            {
+                mainarr->oparr[i]->op = calloc(mainarr->oparr[i]->length, sizeof(char *));
+            }
+            else
+            {
+                mainarr->oparr[i]->op[j] = calloc(strlen(tmpOpStr), sizeof(char));
+                strcpy(mainarr->oparr[i]->op[j], tmpOpStr);
+                strcpy(tmpOpStr, "");
+                j++;
+            }
+            strcat(tmpOpStr, str);
+        }
+        else if (str[0] == '\n')
+        {
+            mainarr->oparr[i]->op[j] = calloc(strlen(tmpOpStr), sizeof(char));
+            strcpy(mainarr->oparr[i]->op[j], tmpOpStr);
+            strcpy(tmpOpStr, "");
+            i++;
+            j = 0;
+        }
+        else
+        {
+            strcat(tmpOpStr, str);
+        }
+    }
+    fclose(tmpFile);
+    return mainarr->length - 1;
+}
+
+int opNum(struct MainArray *mainarr, int i)
+{
+    if (i >= mainarr->length)
+    {
+        printf("Wrong index!\n");
+        return -1;
+    }
+    return mainarr->oparr[i]->length;
+}
+
+void removeOpBlock(struct MainArray *mainarr, int i)
+{
+    if (i >= mainarr->length)
+    {
+        printf("Wrong index!\n");
+        return;
+    }
+    for (int j = 0; j < mainarr->oparr[i]->length; j++)
+    {
+        free(mainarr->oparr[i]->op[j]);
+    }
+    free(mainarr->oparr[i]->op);
+    free(mainarr->oparr[i]);
+    mainarr->length--;
+    for (int j = i; j < mainarr->length; j++)
+    {
+        mainarr->oparr[j] = mainarr->oparr[j + 1];
+    }
+    mainarr->oparr = realloc(mainarr->oparr, mainarr->length * sizeof(struct OperationsArray *));
+}
+
+void removeOp(struct MainArray *mainarr, int i, int j)
+{
+    if (i >= mainarr->length || j >= mainarr->oparr[i]->length)
+    {
+        printf("Wrong index!\n");
+        return;
+    }
+    free(mainarr->oparr[i]->op[j]);
+    mainarr->oparr[i]->length--;
+    for (int k = j; k < mainarr->oparr[i]->length; k++)
+    {
+        mainarr->oparr[i]->op[k] = mainarr->oparr[i]->op[k + 1];
+    }
+    mainarr->oparr[i]->op = realloc(mainarr->oparr[i]->op, mainarr->oparr[i]->length * sizeof(char *));
+}
+
+void freeAll(struct MainArray *mainarr)
+{
+    for (int i = 0; i < mainarr->length; i++)
+    {
+        for (int j = 0; j < mainarr->oparr[i]->length; j++)
+        {
+            free(mainarr->oparr[i]->op[j]);
+        }
+        free(mainarr->oparr[i]->op);
+        free(mainarr->oparr[i]);
+    }
+    free(mainarr->oparr);
+    free(mainarr);
+    mainarr = NULL;
 }
