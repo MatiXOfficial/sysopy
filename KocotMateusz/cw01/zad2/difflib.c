@@ -191,7 +191,6 @@ void freeAll(struct MainArray *mainarr)
 {
     if (mainarr == NULL)
     {
-        printf("Main array was not initalized yet!\n");
         return;
     }
     for (int i = 0; i < mainarr->length; i++)
@@ -205,5 +204,4 @@ void freeAll(struct MainArray *mainarr)
     }
     free(mainarr->oparr);
     free(mainarr);
-    mainarr = NULL;
 }
