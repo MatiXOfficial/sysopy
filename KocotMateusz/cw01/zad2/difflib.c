@@ -54,7 +54,8 @@ void saveDiffToTmp(char *filesString)
             fputc(ch, tmpFile);
             ch = getc(diffout);
         }
-        putc('\n', tmpFile);
+        if (i < filesCount - 2)
+            putc('\n', tmpFile);
         pclose(diffout);
     }
     pclose(tmpFile);
@@ -62,8 +63,6 @@ void saveDiffToTmp(char *filesString)
     for (int i = 0; i < filesCount; i++)
         free(filesSequence[i]);
     free(filesSequence);
-
-    printf("Saved results to the temporary file.\n");
 }
 
 int saveTmpToArr(struct MainArray *mainarr)
@@ -82,7 +81,7 @@ int saveTmpToArr(struct MainArray *mainarr)
     sscanf(str, "%d", &pairsNum);
     if (mainarr->length + pairsNum > mainarr->n)
     {
-        printf("Not enoguh space in the main array!");
+        printf("Not enough space in the main array!\n");
         return -1;
     }
     mainarr->length += pairsNum;
@@ -102,8 +101,9 @@ int saveTmpToArr(struct MainArray *mainarr)
     }
 
     // Filling operations array
+    int fileLength = ftell(tmpFile);
     rewind(tmpFile);
-    char tmpOpStr[500] = "";
+    char *tmpOpStr = calloc(fileLength, sizeof(char));
     fgets(str, 100, tmpFile);
     i = mainarr->length - pairsNum; int j = 0;
     while (fgets(str, 100, tmpFile) != NULL)
@@ -136,6 +136,7 @@ int saveTmpToArr(struct MainArray *mainarr)
             strcat(tmpOpStr, str);
         }
     }
+    free(tmpOpStr);
     fclose(tmpFile);
     return mainarr->length - 1;
 }
