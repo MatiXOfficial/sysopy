@@ -1,0 +1,31 @@
+compare 5  pairs, sim: huge
+r: 0.000009, s: 0.000000, u: 0.000000
+compare 15 pairs, sim: huge
+r: 0.000033, s: 0.000003, u: 0.000000
+compare 30 pairs, sim: huge
+r: 0.000070, s: 0.000000, u: 0.000000
+compare 5  pairs, sim:  med
+r: 0.000014, s: 0.000001, u: 0.000000
+compare 15 pairs, sim:  med
+r: 0.000027, s: 0.000003, u: 0.000000
+compare 30 pairs, sim:  med
+r: 0.000054, s: 0.000001, u: 0.000000
+compare 5  pairs, sim:  low
+r: 0.000009, s: 0.000000, u: 0.000000
+compare 15 pairs, sim:  low
+r: 0.000044, s: 0.000000, u: 0.000000
+compare 30 pairs, sim:  low
+r: 0.000082, s: 0.000012, u: 0.000000
+
+compare and remove  5 blocks, sim: huge
+r: 0.000012, s: 0.000000, u: 0.000000
+compare and remove 15 blocks, sim: huge
+r: 0.000036, s: 0.000000, u: 0.000000
+compare and remove 30 blocks, sim: huge
+r: 0.000069, s: 0.000006, u: 0.000000
+compare and remove x5  5 blocks, sim: huge
+r: 0.000058, s: 0.000001, u: 0.000000
+compare and remove x5 15 blocks, sim: huge
+r: 0.000157, s: 0.000009, u: 0.000000
+compare and remove x5 30 blocks, sim: huge
+r: 0.000318, s: 0.000021, u: 0.000000

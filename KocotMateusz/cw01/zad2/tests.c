@@ -1,5 +1,5 @@
-#include "difflib.h"
-#include "difflib.c"
+#include "../zad1/difflib.h"
+#include "../zad1/difflib.c"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,16 +7,16 @@
 #include <time.h>
 #include <sys/times.h>
 
-#define print_time(i, str) printTime(i, str, calTime(rtstart, rtend), calTime(tstart->tms_stime, tend->tms_stime), calTime(tstart->tms_utime, tend->tms_utime));
+#define print_time printTime(calTime(rtstart, rtend), calTime(tstart->tms_stime, tend->tms_stime), calTime(tstart->tms_utime, tend->tms_utime))
 
 double calTime(clock_t start, clock_t end)
 {
     return ((double) (end - start)) / CLOCKS_PER_SEC;
 }
 
-void printTime(int i, char *name, double rtime, double stime, double utime)
+void printTime(double rtime, double stime, double utime)
 {
-    printf("%d %s: r: %f, s: %f, u: %f\n", i, name, rtime, stime, utime);
+    printf("r: %f, s: %f, u: %f\n", rtime, stime, utime);
 }
 
 int main(int argc, char *argv[])
@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     struct MainArray *mainarr = NULL;
     struct tms *tstart = calloc(1, sizeof(struct tms)), *tend = calloc(1, sizeof(struct tms));
     clock_t rtstart, rtend;
+    rtstart = times(tstart);
     int i = 1;
     while (i < argc)
     {
@@ -41,10 +42,7 @@ int main(int argc, char *argv[])
                     printf("You have to pass the size of the main array!\n");
                     return 1;
                 }
-                rtstart = times(tstart);
                 mainarr = createMainArray(atoi(argv[i + 1]));
-                rtend = times(tend);
-                print_time(i, argv[i]);
                 i += 2;
             }
             else
@@ -75,7 +73,7 @@ int main(int argc, char *argv[])
                     return 1;
                 }
                 i++;
-                char str[100] = "";
+                char *str = calloc(pairsNum * 50, sizeof(char));
                 int j;
                 for (j = i; j < i + 2 * pairsNum; j += 2)
                 {
@@ -86,11 +84,9 @@ int main(int argc, char *argv[])
                 }
                 i = j;
                 str[strlen(str) - 1] = 0;
-                rtstart = times(tstart);
                 saveDiffToTmp(str);
+                free(str);
                 saveTmpToArr(mainarr);
-                rtend = times(tend);
-                print_time(i - pairsNum * 2 - 2, argv[i - pairsNum * 2 - 2]);
             }
             else if (strcmp(argv[i], "remove_block") == 0)
             {
@@ -101,10 +97,7 @@ int main(int argc, char *argv[])
                 }
                 int j = atoi(argv[i + 1]);
                 i += 2;
-                rtstart = times(tstart);
                 removeOpBlock(mainarr, j);
-                rtend = times(tend);
-                print_time(i - 2, argv[i - 2]);
             }
             else if (strcmp(argv[i], "remove_operation") == 0)
             {
@@ -116,10 +109,7 @@ int main(int argc, char *argv[])
                 int j = atoi(argv[i + 1]);
                 int k = atoi(argv[i + 2]);
                 i += 3;
-                rtstart = times(tstart);
                 removeOp(mainarr, j, k);
-                rtend = times(tend);
-                print_time(i - 3, argv[i - 3]);
             }
             else if (strcmp(argv[i], "free_array") == 0)
             {
@@ -134,6 +124,8 @@ int main(int argc, char *argv[])
             }
         }
     }
+    rtend = times(tend);
+    print_time;
     free(tstart), free(tend);
     freeAll(mainarr);
     return 0;
