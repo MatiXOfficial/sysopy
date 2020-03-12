@@ -104,16 +104,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    if (mainarr != NULL)
-    {
-        for (int i = 0; i < mainarr->length; i++)
-        {
-            for (int j = 0; j < mainarr->oparr[i]->length; j++)
-            {
-                printf("%s\n", mainarr->oparr[i]->op[j]);
-            }
-        }
-    }
     freeAll(mainarr);
     return 0;
 }
