@@ -6,12 +6,13 @@
 #include <string.h>
 #include <time.h>
 #include <sys/times.h>
+#include <unistd.h>
 
 #define print_time printTime(calTime(rtstart, rtend), calTime(tstart->tms_stime, tend->tms_stime), calTime(tstart->tms_utime, tend->tms_utime))
 
 double calTime(clock_t start, clock_t end)
 {
-    return ((double) (end - start)) / CLOCKS_PER_SEC;
+    return ((double) (end - start)) / sysconf(_SC_CLK_TCK);
 }
 
 void printTime(double rtime, double stime, double utime)
