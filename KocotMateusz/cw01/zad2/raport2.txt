@@ -1,31 +1,31 @@
 compare 5  pairs, sim: huge
-r: 0.090000, s: 0.000000, u: 0.000000
+r: 0.130000, s: 0.000000, u: 0.000000
 compare 15 pairs, sim: huge
-r: 0.260000, s: 0.040000, u: 0.000000
+r: 0.410000, s: 0.010000, u: 0.000000
 compare 30 pairs, sim: huge
-r: 0.520000, s: 0.000000, u: 0.000000
+r: 0.580000, s: 0.000000, u: 0.000000
 compare 5  pairs, sim:  med
-r: 0.090000, s: 0.000000, u: 0.000000
+r: 0.100000, s: 0.000000, u: 0.000000
 compare 15 pairs, sim:  med
-r: 0.270000, s: 0.010000, u: 0.010000
+r: 0.250000, s: 0.010000, u: 0.000000
 compare 30 pairs, sim:  med
-r: 0.540000, s: 0.030000, u: 0.000000
+r: 0.530000, s: 0.000000, u: 0.000000
 compare 5  pairs, sim:  low
-r: 0.090000, s: 0.000000, u: 0.000000
+r: 0.090000, s: 0.010000, u: 0.000000
 compare 15 pairs, sim:  low
-r: 0.270000, s: 0.030000, u: 0.000000
+r: 0.260000, s: 0.000000, u: 0.000000
 compare 30 pairs, sim:  low
-r: 0.550000, s: 0.040000, u: 0.000000
+r: 0.520000, s: 0.000000, u: 0.000000
 
 compare and remove  5 blocks, sim: huge
 r: 0.090000, s: 0.000000, u: 0.000000
 compare and remove 15 blocks, sim: huge
-r: 0.270000, s: 0.040000, u: 0.000000
+r: 0.250000, s: 0.010000, u: 0.000000
 compare and remove 30 blocks, sim: huge
-r: 0.520000, s: 0.010000, u: 0.000000
+r: 0.520000, s: 0.040000, u: 0.000000
 compare and remove x5  5 blocks, sim: huge
-r: 0.430000, s: 0.030000, u: 0.000000
+r: 0.440000, s: 0.010000, u: 0.000000
 compare and remove x5 15 blocks, sim: huge
-r: 1.300000, s: 0.070000, u: 0.010000
+r: 1.330000, s: 0.070000, u: 0.010000
 compare and remove x5 30 blocks, sim: huge
-r: 2.700000, s: 0.070000, u: 0.000000
+r: 2.600000, s: 0.070000, u: 0.000000

@@ -12,3 +12,9 @@ shared:
 
 clean:
 	rm -f *.o
+
+clean_all:
+	rm -f *.o
+	rm -f *.a
+	rm -f *.so
+	rm -f diffTmpFile.txt
