@@ -13,7 +13,6 @@ static:
 	$(CC) tests.c -static -L. -ldifflib -o tests
 	@echo "---------------------\nSTATIC" >> results3a.txt
 	make test >> results3a.txt
-	make clean
 
 shared:
 	$(CC) -c -fPIC difflib.c
@@ -21,7 +20,6 @@ shared:
 	$(CC) tests.c -L. -Wl,-rpath=. -ldifflib -o tests
 	@echo "---------------------\nSHARED" >> results3a.txt
 	make test >> results3a.txt
-	make clean
 
 dynamic:
 	$(CC) -fPIC -c difflib.c
@@ -29,7 +27,6 @@ dynamic:
 	$(CC) tests_dyn.c -ldl -o tests
 	@echo "---------------------\nDYNAMIC" >> results3a.txt
 	make test >> results3a.txt
-	make clean
 
 
 c11 = compare_pairs 5 files/shuge/shuge1 files/shuge/shuge2 files/shuge/shuge1 files/shuge/shuge3 files/shuge/shuge1 files/shuge/shuge4 files/shuge/shuge1 files/shuge/shuge5 files/shuge/shuge1 files/shuge/shuge6
