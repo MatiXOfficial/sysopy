@@ -5,28 +5,46 @@ CC = gcc -Wall
 all: start static shared dynamic clean
 
 start:
-	rm -f results3a.txt
+	rm -f results3b.txt
 
 static:
 	$(CC) -c difflib.c
 	ar rcs libdifflib.a difflib.o
-	$(CC) tests.c -static -L. -ldifflib -o tests
-	@echo "---------------------\nSTATIC" >> results3a.txt
-	make test >> results3a.txt
+	$(CC) tests.c -O0 -static -L. -ldifflib -o tests
+	@echo "---------------------\nSTATIC -O0" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests.c -O1 -static -L. -ldifflib -o tests
+	@echo "---------------------\nSTATIC -O1" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests.c -Os -static -L. -ldifflib -o tests
+	@echo "---------------------\nSTATIC -Os" >> results3b.txt
+	make test >> results3b.txt
 
 shared:
 	$(CC) -c -fPIC difflib.c
 	$(CC) -shared -o libdifflib.so difflib.o
-	$(CC) tests.c -L. -Wl,-rpath=. -ldifflib -o tests
-	@echo "---------------------\nSHARED" >> results3a.txt
-	make test >> results3a.txt
+	$(CC) tests.c -O0 -L. -Wl,-rpath=. -ldifflib -o tests
+	@echo "---------------------\nSHARED -O0" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests.c -O1 -L. -Wl,-rpath=. -ldifflib -o tests
+	@echo "---------------------\nSHARED -O1" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests.c -Os -L. -Wl,-rpath=. -ldifflib -o tests
+	@echo "---------------------\nSHARED -Os" >> results3b.txt
+	make test >> results3b.txt
 
 dynamic:
 	$(CC) -fPIC -c difflib.c
 	$(CC) -shared -fPIC -o libdifflib.so difflib.o 
-	$(CC) tests_dyn.c -ldl -o tests
-	@echo "---------------------\nDYNAMIC" >> results3a.txt
-	make test >> results3a.txt
+	$(CC) tests_dyn.c -O0 -ldl -o tests
+	@echo "---------------------\nDYNAMIC -O0" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests_dyn.c -O1 -ldl -o tests
+	@echo "---------------------\nDYNAMIC -O1" >> results3b.txt
+	make test >> results3b.txt
+	$(CC) tests_dyn.c -Os -ldl -o tests
+	@echo "---------------------\nDYNAMIC -Os" >> results3b.txt
+	make test >> results3b.txt
 
 
 c11 = compare_pairs 5 files/shuge/shuge1 files/shuge/shuge2 files/shuge/shuge1 files/shuge/shuge3 files/shuge/shuge1 files/shuge/shuge4 files/shuge/shuge1 files/shuge/shuge5 files/shuge/shuge1 files/shuge/shuge6
