@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
     char path[500];
     strcpy(path, argv[2]);
     realpath(path, path);
-    printf("%s\n", path);
 
     int i = 3;
     while (i < argc)
@@ -172,8 +171,8 @@ void printFileStat(const char *path, const struct stat *fileStat)
     int adiff = (rawtime - ta) / 86400;
     int mdiff = (rawtime - tm) / 86400;
 
-    if ((mtime == -1 || (mtimemod == 0 && mtime == mdiff) || (mtimemod == -1 && mtime >= mdiff) || (mtimemod == 1 && mtime <= mdiff)) &&
-        (atime == -1 || (atimemod == 0 && atime == adiff) || (atimemod == -1 && atime >= adiff) || (atimemod == 1 && atime <= adiff)))
+    if ((mtime == -1 || (mtimemod == 0 && mtime == mdiff) || (mtimemod == -1 && mtime > mdiff) || (mtimemod == 1 && mtime < mdiff)) &&
+        (atime == -1 || (atimemod == 0 && atime == adiff) || (atimemod == -1 && atime > adiff) || (atimemod == 1 && atime < adiff)))
             printf("path: %s, nlinks: %ld, type: %s, size: %ld, atime: %s, mtime: %s\n",
                     path, fileStat->st_nlink, fileType, fileStat->st_size, atimestr, mtimestr);
 }
