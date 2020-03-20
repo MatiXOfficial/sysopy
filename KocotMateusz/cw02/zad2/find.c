@@ -189,6 +189,8 @@ void findLib(char *path, int depth)
     file = readdir(dir);
     file = readdir(dir);
     struct stat *fileStat = calloc(1, sizeof(struct stat));
+    stat(path, fileStat);
+    printFileStat(path, fileStat);
     while (file != NULL)
     {
         char newpath[250];
