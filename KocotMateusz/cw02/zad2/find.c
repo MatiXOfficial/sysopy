@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     {
         error("Use ./main [dir/nftw] [path] arguments!");
     }
-    int useNtfw = 0;
+    int useNftw = 0;
     if (strcmp(argv[1], "nftw") == 0)
     {
-        useNtfw = 1;
+        useNftw = 1;
     }
     char path[500];
     strcpy(path, argv[2]);
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
             error("Wrong argument!");
         }
     }
-    if (useNtfw == 0)
+    if (useNftw == 0)
     {
         findLib(path, 0);
     }
