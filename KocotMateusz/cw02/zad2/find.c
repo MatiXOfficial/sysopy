@@ -20,7 +20,7 @@ int fn (const char *path, const struct stat *sb, int typeflag, struct FTW *ftwbu
 
 int mtime = -1, mtimemod = 0;   // 1: +, -1: -
 int atime = -1, atimemod = 0;
-int maxdepth = INT_MAX;
+int maxdepth = INT_MAX - 1;
 
 int main(int argc, char *argv[])
 {
@@ -34,8 +34,9 @@ int main(int argc, char *argv[])
         useNftw = 1;
     }
     char path[500];
-    strcpy(path, argv[2]);
-    realpath(path, path);
+    char rpath[500];
+    strcpy(rpath, argv[2]);
+    realpath(rpath, path);
 
     int i = 3;
     while (i < argc)
