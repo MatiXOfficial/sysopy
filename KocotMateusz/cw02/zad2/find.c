@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
 {
     if (argc <= 2)
     {
-        error("Use ./main [dir/ntfw] [path] arguments!");
+        error("Use ./main [dir/nftw] [path] arguments!");
     }
     int useNtfw = 0;
-    if (strcmp(argv[1], "ntfw") == 0)
+    if (strcmp(argv[1], "nftw") == 0)
     {
         useNtfw = 1;
     }
@@ -208,7 +208,7 @@ void findLib(char *path, int depth)
 
 int fn (const char *path, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
 {
-    if (ftwbuf->level > maxdepth)
+    if (ftwbuf->level > maxdepth + 1)
         return 0;
 
     printFileStat(path, sb);
