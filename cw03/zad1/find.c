@@ -186,7 +186,7 @@ void findLib(char *path, int depth, char *relPath)
         strcat(newpath, "/");
         strcat(newpath, file->d_name);
         stat(newpath, fileStat);
-        printFileStat(newpath, fileStat);
+        //printFileStat(newpath, fileStat);
         if (S_ISDIR(fileStat->st_mode) && depth < maxdepth)
         {
             char newRelPath[500];

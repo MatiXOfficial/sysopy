@@ -8,7 +8,7 @@ build:
 clean:
 	rm find
 
-test:
+example:
 	make build
 	./find directory
 	make clean
