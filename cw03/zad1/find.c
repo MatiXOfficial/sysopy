@@ -198,7 +198,6 @@ void findLib(char *path, int depth, char *relPath)
             {
                 printf("%s, %d\n", newRelPath, getpid());
                 execl("/bin/ls", "ls", "-l", NULL);
-                findLib(newpath, depth + 1, newRelPath);
             }
             else
             {
