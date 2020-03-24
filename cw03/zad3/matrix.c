@@ -8,6 +8,7 @@
 #include <time.h>
 #include <sys/times.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 
 const int NUMLEN = 16;
 
@@ -21,18 +22,21 @@ struct Matrix
 void error(char *mes);
 void fileTok(FILE *file, char *buffer, char *delim);
 struct Matrix readMatrix(FILE *file);
-void generateProcesses(int *pidArr, int procNum, int *exitArr);
+void generateProcesses(int *pidArr, int procNum, int htimeLimit, int hmemLimit);
 int getpidx(int *pidArr, int pid, int procNum);
 int multiplyRowCol(struct Matrix matrixIn1, struct Matrix matrixIn2, int row, int col);
 void multiplyShared(struct Matrix matrixIn1, struct Matrix matrixIn2, FILE *fileOut, int procNum, int *pidArr, int step, int *multFrag);
 void multiplySeparate(struct Matrix matrixIn1, struct Matrix matrixIn2, FILE *fileOut, int procNum, int *pidArr, int step, int *multFrag);
 
+void setLimits(int htimeLimit, int hmemLimit);
+double calcTime(struct rusage usageStart, struct rusage usageEnd, int calcSys);
+
 int main(int argc, char *argv[])
 {
     //////////////// Arguments /////////////////////////////////////
-    if (argc != 5)
+    if (argc != 7)
     {
-        error("Wrong arguments! Try: ./matrix [list file] [processes count] [time limit] [shared/separate (result file)]");
+        error("Wrong arguments! Try: ./matrix [list file] [processes count] [time limit] [shared/separate] [hard time limit] [hard memory limit]");
     }
 
     FILE *listFile = fopen(argv[1], "r");
@@ -58,13 +62,14 @@ int main(int argc, char *argv[])
     {
         error("4th argument should be either shared or separate (result file)");
     }
-    
+
+    int htimeLimit = atoi(argv[5]);
+    int hmemLimit = atoi(argv[6]);
 
     ///////////////// Program ////////////////////////////////////////
     int mainPid = getpid();
     int *pidArr = calloc(procNum, sizeof(int));
-    int *exitArr = calloc(procNum, sizeof(int));
-    generateProcesses(pidArr, procNum, exitArr);
+    generateProcesses(pidArr, procNum, htimeLimit, hmemLimit);
     int multFragm = 0;
     clock_t tstart = times(NULL);
 
@@ -188,13 +193,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (int i = 0; i < procNum; i++)
-    {
-        printf("Process nr: %d, pid: %d multiplied the matrices %d time(s)\n", i, pidArr[i], exitArr[i]);
-    }
-
     free(pidArr);
-    free(exitArr);
     fclose(listFile);
 }
 
@@ -269,7 +268,7 @@ int getpidx(int *pidArr, int pid, int procNum)
     return pidx;
 }
 
-void generateProcesses(int *pidArr, int procNum, int *exitArr)
+void generateProcesses(int *pidArr, int procNum, int htimeLimit, int hmemLimit)
 {
     int childPid = 1;
     for (int i = 0; i < procNum; i++)
@@ -284,17 +283,24 @@ void generateProcesses(int *pidArr, int procNum, int *exitArr)
         }
         else
         {
+            setLimits(htimeLimit, hmemLimit);
             pidArr[i] = getpid();
             break;
         }
     }
     if (childPid != 0)
     {
+        int status;
+        struct rusage usageStart;
+        struct rusage usageEnd;
         for (int i = 0; i < procNum; i++)
         {
-            int status;
+            getrusage(RUSAGE_CHILDREN, &usageStart);
             waitpid(pidArr[i], &status, 0);
-            exitArr[i] = WEXITSTATUS(status);
+            status = WEXITSTATUS(status);
+            getrusage(RUSAGE_CHILDREN, &usageEnd);
+            printf("Process nr: %d, pid: %d multiplied the matrices %d time(s). Usage: utime: %f, stime: %f\n", 
+                i, pidArr[i], status, calcTime(usageStart, usageEnd, 0), calcTime(usageStart, usageEnd, 1));
         }
     }
 }
@@ -366,4 +372,25 @@ void multiplySeparate(struct Matrix matrixIn1, struct Matrix matrixIn2, FILE *fi
         putc('\n', fileOut);
     }
     (*multFrag)++;
+}
+
+void setLimits(int htimeLimit, int hmemLimit)
+{
+    struct rlimit cpuLimit = {htimeLimit, htimeLimit};
+    struct rlimit asLimit = {hmemLimit, hmemLimit};
+
+    setrlimit(RLIMIT_CPU, &cpuLimit);
+    setrlimit(RLIMIT_AS, &asLimit);
+}
+
+double calcTime(struct rusage usageStart, struct rusage usageEnd, int calcSys)
+{
+    if (calcSys == 1)
+    {
+        return usageEnd.ru_stime.tv_sec + usageEnd.ru_stime.tv_usec * 1e-6 - usageStart.ru_stime.tv_sec - usageStart.ru_stime.tv_usec * 1e-6;
+    }
+    else
+    {
+        return usageEnd.ru_utime.tv_sec + usageEnd.ru_utime.tv_usec * 1e-6 - usageStart.ru_utime.tv_sec - usageStart.ru_utime.tv_usec * 1e-6;
+    }
 }
