@@ -16,9 +16,9 @@ clean:
 
 example:
 	make build
-	./generator 10 8 16
-	./matrix list 10 10 shared
+	./generator 20 32 64
+	./matrix list 10 10 shared 1 1
 	./test list
-	./matrix list 10 10 separate
+	./matrix list 10 10 separate 1 1
 	./test list
 	make clean
