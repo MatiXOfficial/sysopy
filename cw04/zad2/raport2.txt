@@ -1,0 +1,16 @@
+1. ignore
+Sygnał ignorowany w procesie pierwotnym, procesie potomnym oraz po wywołaniu funkcji exec.
+
+2. handler
+Sygnał odpowiednio obsłużony w procesie pierwotnym oraz procesie potomnym.
+
+3. mask
+Sygnał maskowany w procesie pierwotnym, procesie potomnym oraz po wywołaniu funkcji exec.
+
+4. pending
+Sygnał oczekuje w procesie pierwotnym oraz po wywołaniu funkcji exec.
+W procesie potomnym nie wykryto sygnału oczekującego.
+
+Ignorowanie i maskowanie są zawsze dziedziczone.
+Obsługa jest dziedziczona do procesu potomnego.
+Sygnały oczekujące są dziedziczone do funkcji exec, natomiast są usuwane w procesie potomnym.
