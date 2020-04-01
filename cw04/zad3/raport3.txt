@@ -1,0 +1,13 @@
+Wykorzystano trzy sygnały:
+1. SIGCHLD - zakończenie procesu potomnego
+2. SIGFPE - dzielenie liczby całkowitej przez 0
+3. SIGSEGV - segmentation fault
+
+1. SIGCHLD
+Kod wyjścia - 17, czyli dokładnie taki, jaki przekazano do funkcji exit (exit(17)).
+
+2. SIGFPE
+Kod sygnału - 1 czyli FPE_INTDIV, co oznacza dokładnie dzielenie liczby całkowitej (int) przez 0.
+
+3. SIGSEGV
+Adres błędnej instrukcji - 0x28
