@@ -124,7 +124,7 @@ void error(char *mes)
 
 void handleSIGCOUNT(int signum, siginfo_t *siginfo, void *ucontext)
 {
-    if (receivedCounter != -1)
+    if (receivedCounter != -1)  // receiving phase
     {
         receivedCounter++;
         if (opt == KILL || opt == SIGRT)
@@ -138,7 +138,7 @@ void handleSIGCOUNT(int signum, siginfo_t *siginfo, void *ucontext)
             sigqueue(catcherPid, SIGCOUNT, value);
         }
     }
-    else
+    else    // sending phase
     {
         waitForConfirmation = 0;
     }

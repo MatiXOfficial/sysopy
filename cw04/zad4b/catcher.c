@@ -123,7 +123,7 @@ void error(char *mes)
 
 void handleSIGCOUNT(int signum, siginfo_t *siginfo, void *ucontext)
 {
-    if (waitForConfirmation == -1)
+    if (waitForConfirmation == -1)  // receiving phase
     {
         senderPid = siginfo->si_pid;
         receivedCounter++;
@@ -137,7 +137,7 @@ void handleSIGCOUNT(int signum, siginfo_t *siginfo, void *ucontext)
             sigqueue(senderPid, SIGCOUNT, value);
         }
     }
-    else
+    else    // sending phase
     {
         waitForConfirmation = 0;
     }
