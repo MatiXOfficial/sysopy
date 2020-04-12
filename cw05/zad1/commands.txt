@@ -1,0 +1,3 @@
+cat main.c | tail -n 5
+cat main.c | head -n 10 | tail -n 5 | grep #
+ls -la /etc | head -n 20 | tail -n 2 | grep root
