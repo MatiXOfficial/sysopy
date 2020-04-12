@@ -10,10 +10,11 @@
 #define COMM_LIMIT 10
 
 void error(char *mes);
-void filetok(FILE *file, char *dest, char *delims);
+void filetok(FILE *file, char *dest, char *delims);     // like strtok, but with file
 
 int main(int argc, char *argv[])
 {
+    /////////// args preparation ////////////////
     if (argc != 2)
     {
         error("wrong arguments number");
@@ -31,13 +32,14 @@ int main(int argc, char *argv[])
     }
     char *buffer;
 
+    ///////////// now commands line by line ////////////
     filetok(file, line, "\n");
     while(line[0] != EOF)
     {
         printf("\n---->current line: %s\n", line);
-        int fd_prev[2]; 
+        int fd_prev[2];     // writing descriptor
         pipe(fd_prev);
-        int fd_curr[2]; 
+        int fd_curr[2];     // reading descriptor
         pipe(fd_curr);
         bool isFirst = true;
         int procCount = 0;
@@ -63,20 +65,20 @@ int main(int argc, char *argv[])
                 command[argidx] = NULL;
             }
 
-            //////////// Main functionality //////////////
+            //////////// command handling //////////////
             if (command[argidx] == NULL)
             {
                 if (fork() == 0)
                 {
                     if (buffer != NULL)
                     {
-                        dup2(fd_curr[1], STDOUT_FILENO);
+                        dup2(fd_curr[1], STDOUT_FILENO);    // STDOUT -> descriptor
                         close(fd_curr[0]);
                         close(fd_curr[1]);
                     }
                     if (!isFirst)
                     {
-                        dup2(fd_prev[0], STDIN_FILENO);
+                        dup2(fd_prev[0], STDIN_FILENO);     //descriptor -> STDIN
                         close(fd_prev[0]);
                         close(fd_prev[1]);
                     }
@@ -96,13 +98,13 @@ int main(int argc, char *argv[])
                     }
                     if (buffer != NULL)
                     {
-                        fd_prev[0] = fd_curr[0];
+                        fd_prev[0] = fd_curr[0];    // in parent - rearranging descriptors
                         fd_prev[1] = fd_curr[1];
                         pipe(fd_curr);
                     }   
                 }
                 
-                command[argidx] = calloc(100, sizeof(char));
+                command[argidx] = calloc(100, sizeof(char));    // deleting NULL from command[argidx]
                 strcpy(command[argidx], "prev");
                 argidx = 0;
             }
