@@ -26,11 +26,7 @@ int main(int argc, char *argv[])
 
     // Semaphores
     semReceivedAccess = sem_open(SEM_RECEIVED_ACCESS_NAME, O_RDWR | O_CREAT, 0777, 1);
-    semReceivedFreeSpace = sem_open(SEM_RECEIVED_FREE_SPACE_NAME, O_RDWR | O_CREAT, 0777, ARR_SIZE);
-    semReceivedCount = sem_open(SEM_RECEIVED_COUNT_NAME, O_RDWR | O_CREAT, 0777, 0);
     semPackedAccess = sem_open(SEM_PACKED_ACCESS_NAME, O_RDWR | O_CREAT, 0777, 1);
-    semPackedFreeSpace = sem_open(SEM_PACKED_FREE_SPACE_NAME, O_RDWR | O_CREAT, 0777, ARR_SIZE);
-    semPackedCount = sem_open(SEM_PACKED_COUNT_NAME, O_RDWR | O_CREAT, 0777, 0);
 
     // Shared memory
     int shmReceived = shm_open(SHM_RECEIVED_NAME, O_RDWR | O_CREAT, 0777);
@@ -104,18 +100,10 @@ void handleSIGINT()
     free(pidArr);
 
     sem_close(semReceivedAccess);
-    sem_close(semReceivedFreeSpace);
-    sem_close(semReceivedCount);
     sem_close(semPackedAccess);
-    sem_close(semPackedFreeSpace);
-    sem_close(semPackedCount);
 
     sem_unlink(SEM_RECEIVED_ACCESS_NAME);
-    sem_unlink(SEM_RECEIVED_FREE_SPACE_NAME);
-    sem_unlink(SEM_RECEIVED_COUNT_NAME);
     sem_unlink(SEM_PACKED_ACCESS_NAME);
-    sem_unlink(SEM_PACKED_FREE_SPACE_NAME);
-    sem_unlink(SEM_PACKED_COUNT_NAME);
 
     shm_unlink(SHM_RECEIVED_NAME);
     shm_unlink(SHM_PACKED_NAME);
