@@ -5,4 +5,6 @@ Semester 4 - Operating Systems course at AGH UST
 - cw02 - files,
 - cw03 - processes,
 - cw04 - signals,
-- cw05 - pipelines;
+- cw05 - pipelines,
+- cw06 - message queues,
+- cw07 - semaphores and shared memory;
