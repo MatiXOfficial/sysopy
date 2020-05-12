@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <semaphore.h>
 
 void error(char *mes);
 
@@ -20,12 +21,17 @@ struct SignThreadArgs
     int min;
     int max;
 };
+
 void *histPartSign(void *ptr);
+void *histPartBlock(void *ptr);
+void *histPartInterleaved(void *ptr);
 
 int **matrix;
 int rows, cols;
 int *hist;
 pthread_t *threadIds;
+
+sem_t *semaphore;
 
 int main(int argc, char *argv[])
 {
@@ -59,6 +65,7 @@ int main(int argc, char *argv[])
     struct timeval start, end;
 
     // Histogram finding
+    semaphore = sem_open("/main", O_RDWR | O_CREAT, S_IRWXU, 1); // For block and interleaved
     gettimeofday(&start, NULL);
     if (strcmp(argv[2], "sign") == 0)
     {
@@ -80,11 +87,32 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(argv[2], "block") == 0)
     {
-        error("not yet implemented");
+        int divSize = (cols + threadNum - 1) / threadNum;
+        int min = 0, max = 0;   
+        for (int i = 0; i < threadNum; i++)
+        {
+            min = max;
+            max = min + divSize;
+            if (max >= cols)
+            {
+                max = cols;
+            }
+            struct SignThreadArgs *threadArgs = calloc(1, sizeof(struct SignThreadArgs));
+            threadArgs->min = min;
+            threadArgs->max = max;
+            pthread_create(&threadIds[i], NULL, histPartBlock, (void *) threadArgs);
+        }
     }
     else if (strcmp(argv[2], "interleaved") == 0)
     {
-        error("not yet implemented");
+        int max = threadNum;    // min - starting column, max - step
+        for (int min = 0; min < threadNum; min++)
+        {
+            struct SignThreadArgs *threadArgs = calloc(1, sizeof(struct SignThreadArgs));
+            threadArgs->min = min;
+            threadArgs->max = max;
+            pthread_create(&threadIds[min], NULL, histPartInterleaved, (void *) threadArgs);
+        }
     }
     else
     {
@@ -101,6 +129,8 @@ int main(int argc, char *argv[])
     }
     gettimeofday(&end, NULL);
     free(threadIds);
+    sem_close(semaphore);
+    sem_unlink("/main");
 
     // Printing times
     for (int i = 0; i < threadNum; i++)
@@ -198,6 +228,58 @@ void *histPartSign(void *ptr)
             {
                 hist[matrix[i][j]]++;
             }
+        }
+    }
+    gettimeofday(&end, NULL);
+    free(ptr);
+
+    double *time = calloc(1, sizeof(double));
+    *time = getTimeDiff(start, end);
+    pthread_exit((void *)time);
+}
+
+void *histPartBlock(void *ptr)
+{
+    struct timeval start, end;
+
+    struct SignThreadArgs *threadArgs = (struct SignThreadArgs *)ptr;
+    int min = threadArgs->min;
+    int max = threadArgs->max;
+
+    gettimeofday(&start, NULL);
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = min; j < max; j++)
+        {
+            sem_wait(semaphore);
+            hist[matrix[i][j]]++;
+            sem_post(semaphore);
+        }
+    }
+    gettimeofday(&end, NULL);
+    free(ptr);
+
+    double *time = calloc(1, sizeof(double));
+    *time = getTimeDiff(start, end);
+    pthread_exit((void *)time);
+}
+
+void *histPartInterleaved(void *ptr)
+{
+    struct timeval start, end;
+
+    struct SignThreadArgs *threadArgs = (struct SignThreadArgs *)ptr;
+    int min = threadArgs->min;
+    int step = threadArgs->max;
+
+    gettimeofday(&start, NULL);
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = min; j < cols; j += step)
+        {
+            sem_wait(semaphore);
+            hist[matrix[i][j]]++;
+            sem_post(semaphore);
         }
     }
     gettimeofday(&end, NULL);
