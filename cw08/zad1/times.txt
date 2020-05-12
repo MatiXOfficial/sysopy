@@ -1,71 +1,71 @@
 ==>sign - 1 thread:
-Thread no:  1: 1072 µs
-Total time: 1288 µs
+Thread no:  1: 1078 µs
+Total time: 1290 µs
 ==>sign - 2 threads:
-Thread no:  1: 934 µs
-Thread no:  2: 1141 µs
-Total time: 1264 µs
+Thread no:  1: 764 µs
+Thread no:  2: 1187 µs
+Total time: 1317 µs
 ==>sign - 4 threads:
-Thread no:  1: 920 µs
-Thread no:  2: 893 µs
-Thread no:  3: 1227 µs
-Thread no:  4: 981 µs
-Total time: 2034 µs
+Thread no:  1: 631 µs
+Thread no:  2: 812 µs
+Thread no:  3: 1224 µs
+Thread no:  4: 726 µs
+Total time: 1703 µs
 ==>sign - 8 threads:
-Thread no:  1: 900 µs
-Thread no:  2: 723 µs
-Thread no:  3: 805 µs
-Thread no:  4: 843 µs
-Thread no:  5: 967 µs
-Thread no:  6: 1228 µs
-Thread no:  7: 919 µs
-Thread no:  8: 685 µs
-Total time: 2663 µs
+Thread no:  1: 629 µs
+Thread no:  2: 617 µs
+Thread no:  3: 738 µs
+Thread no:  4: 826 µs
+Thread no:  5: 964 µs
+Thread no:  6: 2053 µs
+Thread no:  7: 766 µs
+Thread no:  8: 646 µs
+Total time: 2875 µs
 ===========================
 ==>block - 1 thread:
-Thread no:  1: 595 µs
-Total time: 841 µs
+Thread no:  1: 594 µs
+Total time: 831 µs
 ==>block - 2 threads:
-Thread no:  1: 376 µs
-Thread no:  2: 330 µs
-Total time: 612 µs
+Thread no:  1: 356 µs
+Thread no:  2: 343 µs
+Total time: 603 µs
 ==>block - 4 threads:
-Thread no:  1: 236 µs
-Thread no:  2: 202 µs
-Thread no:  3: 270 µs
-Thread no:  4: 217 µs
-Total time: 658 µs
+Thread no:  1: 189 µs
+Thread no:  2: 160 µs
+Thread no:  3: 153 µs
+Thread no:  4: 259 µs
+Total time: 572 µs
 ==>block - 8 threads:
-Thread no:  1: 126 µs
-Thread no:  2: 106 µs
-Thread no:  3: 134 µs
-Thread no:  4: 129 µs
-Thread no:  5: 146 µs
-Thread no:  6: 215 µs
-Thread no:  7: 127 µs
-Thread no:  8: 117 µs
-Total time: 721 µs
+Thread no:  1: 122 µs
+Thread no:  2: 101 µs
+Thread no:  3: 90 µs
+Thread no:  4: 94 µs
+Thread no:  5: 104 µs
+Thread no:  6: 96 µs
+Thread no:  7: 111 µs
+Thread no:  8: 84 µs
+Total time: 748 µs
 ===========================
 ==>interleaved - 1 thread:
-Thread no:  1: 623 µs
-Total time: 836 µs
+Thread no:  1: 604 µs
+Total time: 816 µs
 ==>interleaved - 2 threads:
-Thread no:  1: 351 µs
-Thread no:  2: 348 µs
-Total time: 580 µs
+Thread no:  1: 303 µs
+Thread no:  2: 297 µs
+Total time: 561 µs
 ==>interleaved - 4 threads:
-Thread no:  1: 214 µs
-Thread no:  2: 200 µs
-Thread no:  3: 253 µs
-Thread no:  4: 162 µs
-Total time: 716 µs
+Thread no:  1: 185 µs
+Thread no:  2: 174 µs
+Thread no:  3: 165 µs
+Thread no:  4: 230 µs
+Total time: 564 µs
 ==>interleaved - 8 threads:
-Thread no:  1: 125 µs
-Thread no:  2: 126 µs
-Thread no:  3: 109 µs
-Thread no:  4: 93 µs
-Thread no:  5: 85 µs
-Thread no:  6: 116 µs
-Thread no:  7: 204 µs
-Thread no:  8: 113 µs
-Total time: 690 µs
+Thread no:  1: 121 µs
+Thread no:  2: 96 µs
+Thread no:  3: 88 µs
+Thread no:  4: 97 µs
+Thread no:  5: 103 µs
+Thread no:  6: 115 µs
+Thread no:  7: 97 µs
+Thread no:  8: 129 µs
+Total time: 704 µs

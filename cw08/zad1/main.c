@@ -189,6 +189,10 @@ int checkNotDelim(char sign, char *delims, int n)
             return 0;
         }
     }
+    if (sign == 13)
+    {
+        return 0;
+    }
     return 1;
 }
 
@@ -196,7 +200,13 @@ void fileTok(char *str, int fd, char *delims)
 {
     int n = strlen(delims);
     char sign;
+
     read(fd, &sign, 1);
+    while (sign != EOF && checkNotDelim(sign, delims, n) == 0)
+    {
+        read(fd, &sign, 1);
+    }
+
     int i = 0;
     while (sign != EOF && checkNotDelim(sign, delims, n) == 1)
     {
