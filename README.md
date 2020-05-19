@@ -8,4 +8,5 @@ Semester 4 - Operating Systems course at AGH UST
 - cw05 - pipelines,
 - cw06 - message queues,
 - cw07 - semaphores and shared memory,
-- cw08 - threads;
+- cw08 - threads,
+- cw09 - thread synchronization - mutex, condition variables;
