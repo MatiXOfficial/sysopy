@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     pthread_t *clientIds = calloc(nClients, sizeof(pthread_t));
     for (int i = 0; i < nClients; i++)
     {
-        sleepRandomSec(1, 2);
+        sleepRandomSec(1, 4);
         int *id = calloc(1, sizeof(int));
         *id = i;
         if (pthread_create(&clientIds[i], NULL, clientFun, (void *) id) == -1)
@@ -93,8 +93,8 @@ void *barberFun(void *ptr)
             isBarberAsleep = 1;
             pthread_cond_wait(&condBarber, &mutex);
         }
-        pthread_mutex_unlock(&mutex);
         isBarberAsleep = 0;
+        pthread_mutex_unlock(&mutex);
 
         pthread_mutex_lock(&mutex);
         wr.latest = wr.queue[wr.first];
