@@ -9,4 +9,5 @@ Semester 4 - Operating Systems course at AGH UST
 - cw06 - message queues,
 - cw07 - semaphores and shared memory,
 - cw08 - threads,
-- cw09 - thread synchronization - mutex, condition variables (sleeping barber problem);
+- cw09 - thread synchronization - mutex, condition variables (sleeping barber problem),
+- cw10 - sockets;
